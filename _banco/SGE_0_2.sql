@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 29-Ago-2016 às 16:33
+-- Generation Time: 04-Set-2016 às 20:14
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
@@ -31,7 +31,7 @@ USE `sge`;
 CREATE TABLE `disciplinas` (
   `disciplina_id` varchar(5) NOT NULL,
   `disciplina_nome` varchar(16) NOT NULL,
-  `materia_id` varchar(5) NOT NULL
+  `anoserie` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -44,8 +44,7 @@ CREATE TABLE `materia` (
   `materia_id` varchar(5) NOT NULL,
   `nome` text NOT NULL,
   `descricao` text NOT NULL,
-  `disciplina_id` varchar(5) NOT NULL,
-  `ano` varchar(4) NOT NULL
+  `disciplina_id` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -69,7 +68,6 @@ CREATE TABLE `prof_turma` (
 CREATE TABLE `professor_disciplinas` (
   `matricula` varchar(10) NOT NULL,
   `disciplina_id` varchar(5) NOT NULL,
-  `ano` varchar(5) NOT NULL,
   `ano_letivo` year(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -84,10 +82,8 @@ CREATE TABLE `profs` (
   `nome` tinytext NOT NULL,
   `data_nasc` date NOT NULL,
   `cpf` tinyint(11) NOT NULL,
-  `telefone_residencia` varchar(15) NOT NULL,
   `telefone_celular` varchar(15) NOT NULL,
   `email` varchar(30) NOT NULL,
-  `endereco` text NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -112,7 +108,8 @@ CREATE TABLE `provas` (
   `cod_prova` varchar(5) NOT NULL,
   `matricula` varchar(10) NOT NULL,
   `cod_disciplina` varchar(5) NOT NULL,
-  `ano` varchar(4) NOT NULL,
+  `anoserie` varchar(5) NOT NULL,
+  `tipo_avaliacao` varchar(20) NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -136,9 +133,33 @@ CREATE TABLE `questoes` (
   `op4` text NOT NULL,
   `op5` text NOT NULL,
   `gabarito` text NOT NULL,
-  `direitos` varchar(3) NOT NULL COMMENT 'pub:publico ou pri:privado(disponivel somente para o prof criador da questao)',
+  `ano_letivo` varchar(4) NOT NULL,
+  `anoserie` varchar(5) NOT NULL,
+  `visibilidade` varchar(3) NOT NULL COMMENT 'pub:publico ou pri:privado(disponivel somente para o prof criador da questao)',
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tipo_prova`
+--
+
+CREATE TABLE `tipo_prova` (
+  `tipo_avaliacao` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `tipo_prova`
+--
+
+INSERT INTO `tipo_prova` (`tipo_avaliacao`) VALUES
+('1° certificação '),
+('1° certificação recuperação '),
+('2° certificação '),
+('2° certificação recuperação '),
+('3° certificação '),
+('3° certificação recuperação ');
 
 -- --------------------------------------------------------
 
@@ -147,7 +168,9 @@ CREATE TABLE `questoes` (
 --
 
 CREATE TABLE `turma` (
-  `cod_turma` varchar(5) NOT NULL
+  `cod_turma` varchar(5) NOT NULL,
+  `anoserie` varchar(6) NOT NULL,
+  `sala` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -162,6 +185,14 @@ CREATE TABLE `usuario` (
   `permicao` varchar(10) NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `usuario`
+--
+
+INSERT INTO `usuario` (`matricula`, `senha`, `permicao`, `data_mod`) VALUES
+('0001', '1111', 'prof', '2016-08-29 13:44:38'),
+('0002', '???????????', 'prof', '2016-08-29 13:49:07');
 
 --
 -- Indexes for dumped tables
@@ -196,6 +227,12 @@ ALTER TABLE `provas`
 --
 ALTER TABLE `questoes`
   ADD PRIMARY KEY (`cod_quest`);
+
+--
+-- Indexes for table `tipo_prova`
+--
+ALTER TABLE `tipo_prova`
+  ADD PRIMARY KEY (`tipo_avaliacao`);
 
 --
 -- Indexes for table `turma`
