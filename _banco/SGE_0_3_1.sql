@@ -3,10 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 04-Set-2016 às 21:26
+-- Generation Time: 07-Set-2016 às 05:49
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.35
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -52,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `aluno` (
 --
 -- Estrutura da tabela `aluno_nota`
 --
--- Criação: 04-Set-2016 às 18:49
+-- Criação: 07-Set-2016 às 02:33
 --
 
 DROP TABLE IF EXISTS `aluno_nota`;
@@ -60,7 +61,8 @@ CREATE TABLE IF NOT EXISTS `aluno_nota` (
   `matricula` varchar(5) NOT NULL,
   `disciplina_id` int(5) NOT NULL,
   `nota` int(11) NOT NULL,
-  `ano_letivo` date NOT NULL,
+  `tipo_avaliacao` varchar(30) NOT NULL,
+  `ano_letivo` year(4) NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='INCOMPLETO';
 
@@ -70,6 +72,8 @@ CREATE TABLE IF NOT EXISTS `aluno_nota` (
 --       `disciplinas` -> `disciplina_id`
 --   `matricula`
 --       `aluno` -> `matricula`
+--   `tipo_avaliacao`
+--       `tipo_prova` -> `tipo_avaliacao`
 --
 
 -- --------------------------------------------------------
@@ -120,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `materia` (
 --
 -- Estrutura da tabela `prof_diario`
 --
--- Criação: 04-Set-2016 às 19:21
+-- Criação: 04-Set-2016 às 23:54
 --
 
 DROP TABLE IF EXISTS `prof_diario`;
@@ -128,8 +132,8 @@ CREATE TABLE IF NOT EXISTS `prof_diario` (
   `cod_aula` varchar(10) NOT NULL,
   `matricula` varchar(10) NOT NULL,
   `turma` varchar(5) NOT NULL,
-  `data` date NOT NULL,
   `disciplina_id` varchar(5) NOT NULL,
+  `data` date NOT NULL,
   `comentario` int(11) NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cod_aula`)
@@ -273,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `provas` (
   `matricula` varchar(10) NOT NULL,
   `cod_disciplina` varchar(5) NOT NULL,
   `anoserie` varchar(5) NOT NULL,
-  `tipo_avaliacao` varchar(20) NOT NULL,
+  `tipo_avaliacao` varchar(30) NOT NULL,
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cod_prova`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -311,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   `op4` text NOT NULL,
   `op5` text NOT NULL,
   `gabarito` text NOT NULL,
-  `ano_letivo` varchar(4) NOT NULL,
+  `anocriacao` year(4) NOT NULL,
   `anoserie` varchar(5) NOT NULL,
   `visibilidade` varchar(3) NOT NULL COMMENT 'pub:publico ou pri:privado(disponivel somente para o prof criador da questao)',
   `data_mod` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -333,12 +337,13 @@ CREATE TABLE IF NOT EXISTS `questoes` (
 --
 -- Estrutura da tabela `tipo_prova`
 --
--- Criação: 04-Set-2016 às 14:30
+-- Criação: 07-Set-2016 às 02:40
 --
 
 DROP TABLE IF EXISTS `tipo_prova`;
 CREATE TABLE IF NOT EXISTS `tipo_prova` (
-  `tipo_avaliacao` varchar(30) NOT NULL,
+  `tipo_avaliacao` varchar(2) NOT NULL,
+  `descricao` varchar(30) NOT NULL,
   PRIMARY KEY (`tipo_avaliacao`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -350,13 +355,13 @@ CREATE TABLE IF NOT EXISTS `tipo_prova` (
 -- Extraindo dados da tabela `tipo_prova`
 --
 
-INSERT INTO `tipo_prova` (`tipo_avaliacao`) VALUES
-('1° certificação '),
-('1° certificação recuperação '),
-('2° certificação '),
-('2° certificação recuperação '),
-('3° certificação '),
-('3° certificação recuperação ');
+INSERT INTO `tipo_prova` (`tipo_avaliacao`, `descricao`) VALUES
+('1', '1° certificaÃ§Ã£o '),
+('1r', '1° certificaÃ§Ã£o recuperaÃ§Ã£'),
+('2', '2° certificaÃ§Ã£o '),
+('2r', '2° certificaÃ§Ã£o recuperaÃ§Ã£'),
+('3', '3° certificaÃ§Ã£o '),
+('3r', '3° certificaÃ§Ã£o recuperaÃ§Ã£');
 
 -- --------------------------------------------------------
 
@@ -493,7 +498,7 @@ USE `phpmyadmin`;
 --
 
 INSERT INTO `pma__table_uiprefs` (`username`, `db_name`, `table_name`, `prefs`, `last_update`) VALUES
-('root', 'sge', 'tipo_prova', '{"sorted_col":"`tipo_prova`.`tipo_avaliacao` ASC"}', '2016-09-04 15:49:45');
+('root', 'sge', 'tipo_prova', '{"sorted_col":"`tipo_prova`.`descricao` ASC"}', '2016-09-07 02:45:43');
 
 --
 -- Metadata for turma
@@ -519,6 +524,7 @@ INSERT INTO `pma__relation` (`master_db`, `master_table`, `master_field`, `forei
 ('sge', 'aluno', 'matricula', 'sge', 'usuario', 'matricula'),
 ('sge', 'aluno_nota', 'disciplina_id', 'sge', 'disciplinas', 'disciplina_id'),
 ('sge', 'aluno_nota', 'matricula', 'sge', 'aluno', 'matricula'),
+('sge', 'aluno_nota', 'tipo_avaliacao', 'sge', 'tipo_prova', 'tipo_avaliacao'),
 ('sge', 'materia', 'disciplina_id', 'sge', 'disciplinas', 'disciplina_id'),
 ('sge', 'prof_diario', 'disciplina_id', 'sge', 'disciplinas', 'disciplina_id'),
 ('sge', 'prof_diario', 'matricula', 'sge', 'profs', 'matricula'),
@@ -553,16 +559,21 @@ SET @LAST_PAGE = LAST_INSERT_ID();
 --
 
 INSERT INTO `pma__table_coords` (`db_name`, `table_name`, `pdf_page_number`, `x`, `y`) VALUES
+('sge', 'aluno', @LAST_PAGE, 70, 330),
+('sge', 'aluno_nota', @LAST_PAGE, 270, 360),
 ('sge', 'disciplinas', @LAST_PAGE, 480, 360),
 ('sge', 'materia', @LAST_PAGE, 480, 460),
-('sge', 'prof_turma', @LAST_PAGE, 480, 150),
+('sge', 'prof_diario', @LAST_PAGE, 280, 630),
+('sge', 'prof_diario_aluno', @LAST_PAGE, 500, 630),
+('sge', 'prof_turma', @LAST_PAGE, 480, 140),
 ('sge', 'professor_disciplinas', @LAST_PAGE, 480, 30),
 ('sge', 'profs', @LAST_PAGE, 70, 140),
 ('sge', 'prova_questoes', @LAST_PAGE, 1000, 170),
 ('sge', 'provas', @LAST_PAGE, 1000, 20),
 ('sge', 'questoes', @LAST_PAGE, 1000, 250),
-('sge', 'tipo_prova', @LAST_PAGE, 1240, 100),
+('sge', 'tipo_prova', @LAST_PAGE, 1200, 110),
 ('sge', 'turma', @LAST_PAGE, 480, 250),
+('sge', 'turma_aluno', @LAST_PAGE, 280, 250),
 ('sge', 'usuario', @LAST_PAGE, 70, 20);
 
 --
@@ -609,8 +620,8 @@ INSERT INTO `pma__table_coords` (`db_name`, `table_name`, `pdf_page_number`, `x`
 ('sge', 'aluno_nota', @LAST_PAGE, 430, 270),
 ('sge', 'disciplinas', @LAST_PAGE, 430, 460),
 ('sge', 'prof_diario', @LAST_PAGE, 860, 10),
-('sge', 'prof_diario_aluno', @LAST_PAGE, 870, 220),
-('sge', 'prof_turma', @LAST_PAGE, 610, 10),
+('sge', 'prof_diario_aluno', @LAST_PAGE, 860, 220),
+('sge', 'prof_turma', @LAST_PAGE, 600, 10),
 ('sge', 'profs', @LAST_PAGE, 220, 10),
 ('sge', 'turma', @LAST_PAGE, 610, 170),
 ('sge', 'turma_aluno', @LAST_PAGE, 430, 170),
@@ -641,6 +652,7 @@ INSERT INTO `pma__table_coords` (`db_name`, `table_name`, `pdf_page_number`, `x`
 ('sge', 'tipo_prova', @LAST_PAGE, 1240, 100),
 ('sge', 'turma', @LAST_PAGE, 480, 250),
 ('sge', 'usuario', @LAST_PAGE, 70, 20);
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
