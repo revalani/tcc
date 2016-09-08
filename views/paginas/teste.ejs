@@ -32,68 +32,29 @@
         </div>
         <div class="content col-md-10">
           <main>
-            <div class="form">
-              <h2>Cadastro de Questões</h2>
-              <form method="post" action="">
-                <div>
-                  <p>Autor: <input type="text" name="autor" value="">
-                    Tornar questão:
-                    Publica <input type="radio" name="direitos" value="pub" checked>
-                    Privada <input type="radio" name="direitos" value="pri">
-                  </p>
-                </div>
-                <p> Ano de criação: <input type="date" name="anocriacao" value="">
-                  <div><p>Questão :
-                    Discurciva <input id="d" type="radio" name="tipo" value="d" onclick checked>
-                    Objetiva <input id="o" type="radio" name="tipo" value="o">
-                  </p>
-                </div>
-                <div><p>Dificuldade:
-                  fácil <input type="radio" name="nivel" value="f" checked>
-                  média <input type="radio" name="nivel" value="m">
-                  difícil <input type="radio" name="nivel" value="dificil">
-                </p>
-              </div>
-            <p>Disciplina:
-              <select name="disciplina" value="" required>
-                <option >renen</option>
-                <option >renen</option>
-                <option selected>lindo</option>
-                <option >renen</option>
-              </select>
-            </p>
-            <p>Matéria:
-              <select name="materia" required>
-                <option >renen</option>
-                <option >renen</option>
-                <option selected>o la em casa</option>
-                <option >renen</option>
-              </select>
-            </p>
-            <p>Enunciado: </p>
-            <p><textarea name="enunciado" rows="5" cols="60" value="" placeholder="exemplo: Qual a resposta pra vida universo e tudo mais?" required></textarea></p>
-            <p>Numero de linhas para resposta: <input id="nlinhas" type="nunber" name="nlinhas" value="5" max="20">
-              <p>Gabatiro: </p>
-              <p><textarea name="enunciado" rows="5" cols="60" value="" placeholder="exemplo: Resposta, 42 "></textarea></p>
-              <div id="obj">
-                <h3>Objetivas</h3>
-                <p>Opção A: </p>
-                <p><textarea name="op1" rows="2" cols="60" value="" placeholder="exemplo: 42 é só um numero"></textarea></p>
-                <p>Opção B: </p>
-                <p><textarea name="op2" rows="2" cols="60" value="" placeholder="exemplo: Dolgas tem parafusos de menos "></textarea></p>
-                <p>Opção C: </p>
-                <p><textarea name="op3" rows="2" cols="60" value="" placeholder="exemplo: POP "></textarea></p>
-                <p>Opção D: </p>
-                <p><textarea name="op4" rows="2" cols="60" value="" placeholder="exemplo: Seres pandimencionais e inteligentes"></textarea></p>
-                <p>Opção E: </p>
-                <p><textarea name="op5" rows="2" cols="60" value="" placeholder="exemplo: A vida "></textarea></p>
-              </div>
+            <form method="post" action="veremos">
+              <p id="autor" >Professor : </p>
+              <p> Ano:
+                <select nome="anoserie">
+                  <option>1° ano</option>
+                  <option>2° ano</option>
+                  <option>3° ano</option>
+                </select>
+              </p>
+              <p> Disciplina:
+                <select nome="disciplina">
+                  <option></option>
+                </select>
+              </p>
+              <table border="5">
+                dinamisar isso aqui
+                <tr><td> Autor</td><td> Questao</td><td> resposta</td><td> 4° campo</td></tr>
+                <tr><td> 1° campo</td><td> 2° campo</td><td> 3° campo</td><td> 4° campo</td></tr>
+                <tr><td> 1° campo</td><td> 2° campo</td><td> 3° campo</td><td> 4° campo</td></tr>
+              </table>
 
-              <input type="submit" value="Cadastrar">
-              <form>
-              </div>
-            </main>
-          </div>
+            </form>
+          </main>
         </div>
 
         <div class="footer">

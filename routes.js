@@ -4,6 +4,7 @@ module.exports = function(app) {
 		//Pagninas Principais
 			app.get('/',HomeController.index);
 			app.get('/teste',HomeController.teste);
+			app.get('/prova',HomeController.teste);
 
 }
 
